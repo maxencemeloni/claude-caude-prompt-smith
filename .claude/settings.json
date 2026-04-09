@@ -1,0 +1,21 @@
+{
+  "name": "claude-caude-prompt-smith",
+  "description": "Prompt Optimizer for Claude Code - Rewrites rough prompts into cleaner, more actionable versions",
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(./**/*_rsa)",
+      "Read(./**/id_rsa)",
+      "Read(./**/*.secret)",
+      "Read(./**/*.p12)",
+      "Read(./**/*.pfx)",
+      "Read(./**/credentials*)",
+      "Read(./**/*token*)",
+      "Read(./**/*password*)"
+    ]
+  }
+}

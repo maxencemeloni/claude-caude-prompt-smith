@@ -1,136 +1,231 @@
-# Prompt Smith
+<p align="center">
+  <img src="./assets/prompt-smith-banner.svg" alt="Prompt Smith Banner" width="100%"/>
+</p>
 
-Turn rough prompts into cleaner, more executable Claude Code prompts.
+<p align="center">
+  <img src="https://img.shields.io/badge/Claude_Code-Slash_Commands-blueviolet?style=for-the-badge" alt="Claude Code"/>
+  <img src="https://img.shields.io/badge/v1.0.0-Stable-green?style=for-the-badge" alt="Version"/>
+  <img src="https://img.shields.io/badge/MIT-License-blue?style=for-the-badge" alt="License"/>
+</p>
 
-`Prompt Smith` is a Claude Code plugin command that:
-- rewrites a rough prompt into a stronger version
-- shows the optimized prompt in the terminal
-- lets you change optimization mode
-- asks for confirmation by default
-- executes immediately only after confirmation or with `--yes`
+<h1 align="center">Prompt Smith</h1>
 
-## What it does
+<p align="center">
+  <strong>A slash command for <a href="https://github.com/anthropics/claude-code">Claude Code</a></strong> that optimizes rough prompts into cleaner, more executable versions.
+</p>
 
-Prompt Smith is useful when you have a prompt that is:
-- too messy
-- too vague
-- too verbose
-- not structured enough for Claude Code
-- good in intent but weak in execution quality
+<p align="center">
+  <code>Requires Claude Code CLI — Run this command inside a Claude Code session</code>
+</p>
 
-It optimizes the prompt without changing the goal.
+---
 
-## Modes
+> **What is Claude Code?** [Claude Code](https://github.com/anthropics/claude-code) is Anthropic's official agentic coding CLI. Prompt Smith adds a slash command that rewrites your prompts before execution.
 
-### `default`
-General cleanup.
+---
 
-### `agentic`
-Best for orchestration, execution, multi-step delivery, automation, repo work, and operational prompts.
+## What It Does
 
-### `compact`
-Shortest clean version.
+Prompt Smith takes a rough prompt and **optimizes it** for Claude Code execution:
 
-### `strict`
-Minimal rewrite, maximum fidelity.
+- **Optimize** — Rewrite for clarity, structure, and precision
+- **Preview** — Show original and optimized side-by-side
+- **Choose** — Pick or switch optimization modes
+- **Confirm** — Review before execution (or bypass with `--yes`)
+- **Execute** — Run the optimized prompt immediately after confirmation
 
-## Usage
+---
 
-### Fastest local test
-
-From the parent directory of this plugin:
+## Quick Start
 
 ```bash
-claude --plugin-dir ./prompt-smith
+# Add the marketplace (one-time)
+claude plugin marketplace add maxencemeloni/claude-caude-prompt-smith
+
+# Install the plugin
+claude plugin install prompt-smith
+
+# Use (in any project)
+claude
+/prompt-smith Refactor this function to be more readable
 ```
 
-Then inside Claude Code:
+> **Update:** `claude plugin marketplace update prompt-smith-marketplace && claude plugin update prompt-smith@prompt-smith-marketplace`
 
-```text
-/prompt-smith Optimise ce prompt pour en faire une instruction Claude Code plus propre
-```
+---
 
-If your Claude Code version requires namespacing for plugin commands, use:
+## Command
 
-```text
-/prompt-smith:prompt-smith Optimise ce prompt pour en faire une instruction Claude Code plus propre
-```
+| Command | Purpose |
+|---------|---------|
+| `/prompt-smith` | Optimize a rough prompt with mode selection, preview, and confirmation |
 
-## Command syntax
+### Syntax
 
 ```text
 /prompt-smith [--mode default|agentic|compact|strict] [--yes] <prompt>
 ```
 
-Examples:
+### Examples
 
 ```text
-/prompt-smith Fais-moi un prompt plus clair pour refactorer cette feature
+/prompt-smith Refactor this function to be more readable
 ```
 
 ```text
-/prompt-smith --mode agentic Tu vas organiser le travail en parallèle et valider chaque étape
+/prompt-smith --mode agentic Organize the work in parallel and validate each step
 ```
 
 ```text
-/prompt-smith --mode compact Réécris ce prompt pour qu'il soit plus net
+/prompt-smith --mode compact Rewrite this prompt to be shorter
 ```
 
 ```text
-/prompt-smith --mode strict --yes Corrige ce prompt sans changer son intention
+/prompt-smith --mode strict --yes Fix this prompt without changing its intent
 ```
 
 ```text
 /prompt-smith --list-modes
 ```
 
-## Expected flow
+### Workflow
 
-1. You enter a rough prompt.
-2. Prompt Smith selects or respects a mode.
-3. It prints:
-   - the selected mode
-   - why it chose that mode
-   - the original prompt
-   - the optimized prompt
-4. It asks what to do next.
-5. You can:
-   - execute
-   - regenerate in another mode
-   - cancel
-6. If confirmed, it executes the optimized prompt immediately.
+1. **Parse** — Extract flags and raw prompt from input
+2. **Select mode** — Use explicit `--mode` or infer the best fit
+3. **Preview** — Show mode, rationale, original, and optimized prompt
+4. **Confirm** — Choose: execute, regenerate in another mode, or cancel
+5. **Execute** — Run the optimized prompt in the same session
 
-## Files
+---
 
-```text
-prompt-smith/
-├── .claude-plugin/
-│   └── plugin.json
-├── .claude/
-│   └── history/
-│       └── prompt-smith.md
-├── assets/
-│   └── prompt-smith-banner.svg
-├── commands/
-│   └── prompt-smith.md
-├── CHANGELOG.md
-├── PROMPT_SMITH.md
-└── README.md
+## Optimization Modes
+
+| Mode | Purpose | Best For |
+|------|---------|----------|
+| **default** | General cleanup | Most prompts |
+| **agentic** | Execution-focused structure | Orchestration, automation, multi-step delivery, repo work |
+| **compact** | Shortest clean version | Utility prompts, when brevity matters |
+| **strict** | Maximum fidelity | Sensitive wording, policy text, minimal rewrite |
+
+---
+
+## Sample Output
+
+```markdown
+Prompt Smith
+Mode: agentic
+Why this mode: prompt involves multi-step execution and delivery
+
+Available modes:
+  - default   — general cleanup
+  - agentic   — orchestration and execution-focused structure
+  - compact   — shortest clean version
+  - strict    — maximum fidelity
+
+Original prompt:
+  refactor the auth module, add tests, and make sure nothing breaks
+
+Optimized prompt:
+  ## Objective
+  Refactor the auth module while preserving all existing behavior.
+
+  ## Workflow
+  1. Read and understand the current auth module structure
+  2. Identify refactoring opportunities (duplication, complexity, naming)
+  3. Apply changes incrementally
+  4. Add or update tests to cover refactored code
+  5. Run the full test suite and verify no regressions
+
+  ## Constraints
+  - Do not change the public API surface
+  - Every refactored path must have test coverage
+
+What would you like to do?
+  - execute
+  - regenerate default
+  - regenerate compact
+  - regenerate strict
+  - cancel
 ```
 
-## Versioning
+---
 
-This plugin uses semantic versioning.
+## Design Principles
 
-- patch -> wording and non-breaking tuning
-- minor -> new flags, new modes, UX improvements
-- major -> breaking changes in invocation or behavior
+| Principle | Meaning |
+|-----------|---------|
+| **Fidelity first** | Never silently change the user's intended outcome |
+| **Claude Code native** | Output reads like a terminal instruction, not generic chat |
+| **Minimal structure** | Add structure only when it helps execution |
+| **Confirm by default** | Never execute without consent (unless `--yes`) |
 
-Current version: `1.0.0`
+---
 
-## Notes
+## Install
 
-- The plugin is designed to preserve intent first.
-- Confirmation is required by default.
-- `--yes` is the explicit bypass.
-- `PROMPT_SMITH.md` is the maintainer reference for future edits.
+```bash
+# 1. Add the marketplace (one-time)
+claude plugin marketplace add maxencemeloni/claude-caude-prompt-smith
+
+# 2. Install the plugin
+claude plugin install prompt-smith
+```
+
+Works on all platforms.
+
+```bash
+# Update (refresh marketplace first, then update)
+claude plugin marketplace update prompt-smith-marketplace
+claude plugin update prompt-smith@prompt-smith-marketplace
+
+# Uninstall
+claude plugin uninstall prompt-smith@prompt-smith-marketplace
+```
+
+---
+
+## Contributing
+
+1. Fork the repo
+2. Add/modify commands in `commands/`
+3. Validate with `claude plugin validate .`
+4. Submit a PR
+
+See [CHANGELOG.md](./CHANGELOG.md) for the full changelog.
+
+---
+
+## Development
+
+When working on Prompt Smith with Claude Code, the `CLAUDE.md` file at the project root provides development context including:
+
+- **Design principles** — Fidelity first, Claude Code native, minimal structure
+- **Mode definitions** — Rationale for each optimization mode
+- **Version management** — How to bump versions and update documentation
+- **Repository structure** — Where everything lives
+
+This context is only loaded when developing Prompt Smith itself, not when users run the command in their projects.
+
+### Release Checklist
+
+When releasing a new version:
+
+| Step | Files |
+|------|-------|
+| 1. Update version badge | `README.md` |
+| 2. Add changelog entry | `CHANGELOG.md` |
+| 3. Commit with format | `Release vX.Y.Z — Description` |
+| 4. Push to main | Repository |
+
+---
+
+## License
+
+MIT
+
+---
+
+<p align="center">
+  <a href="https://github.com/maxencemeloni/claude-caude-prompt-smith">GitHub</a> ·
+  <a href="https://hub.mmapi.fr/tools?origin=claudecode">More AI Tools</a>
+</p>

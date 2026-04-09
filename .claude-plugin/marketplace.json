@@ -1,0 +1,17 @@
+{
+  "name": "prompt-smith-marketplace",
+  "owner": {
+    "name": "Maxence Meloni",
+    "email": "maxence@flowie.fr"
+  },
+  "plugins": [
+    {
+      "name": "prompt-smith",
+      "version": "1.0.0",
+      "description": "Optimize rough prompts into clearer, more executable Claude Code prompts with mode-aware rewriting and confirmation-first execution",
+      "category": "development",
+      "source": "./",
+      "homepage": "https://github.com/maxencemeloni/claude-caude-prompt-smith"
+    }
+  ]
+}
