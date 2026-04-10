@@ -2,6 +2,20 @@
 
 All notable changes to this plugin are documented here.
 
+## 1.2.0 — Interactive confirmation with selectable options
+
+*Released: April 2026*
+
+### Changes
+
+- Replaced free-text confirmation with interactive selectable options using `AskUserQuestion`
+- Confirmation now uses a two-step flow: action selection (Execute / Edit / Regenerate / Cancel), then mode selection if Regenerate is chosen
+- Users no longer need to type commands — just select from presented choices
+- Updated sample output in `README.md` to reflect the new interactive UI
+- Kept both command files (dev and plugin) in sync
+
+---
+
 ## 1.1.0 — UX improvements, new flags, and repo rename
 
 *Released: April 2026*

@@ -4,7 +4,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Claude_Code-Slash_Commands-blueviolet?style=for-the-badge" alt="Claude Code"/>
-  <img src="https://img.shields.io/badge/v1.1.0-Stable-green?style=for-the-badge" alt="Version"/>
+  <img src="https://img.shields.io/badge/v1.2.0-Stable-green?style=for-the-badge" alt="Version"/>
   <img src="https://img.shields.io/badge/MIT-License-blue?style=for-the-badge" alt="License"/>
 </p>
 
@@ -108,7 +108,7 @@ claude
 1. **Parse** — Extract flags and raw prompt from input
 2. **Select mode** — Use explicit `--mode` or infer the best fit
 3. **Preview** — Show mode, rationale, original, optimized prompt, and what changed
-4. **Confirm** — Choose: execute, edit, regenerate in another mode, or cancel
+4. **Confirm** — Select an action: execute, edit, regenerate in another mode, or cancel
 5. **Execute** — Run the optimized prompt in the same session
 
 ---
@@ -157,13 +157,14 @@ Optimized prompt:
 
 What changed: restructured into sections, added explicit workflow steps, clarified constraints
 
-What would you like to do?
-  - execute
-  - edit
-  - regenerate default
-  - regenerate compact
-  - regenerate strict
-  - cancel
+┌─────────────────────────────────────┐
+│  What would you like to do?         │
+│                                     │
+│  > Execute                          │
+│    Edit                             │
+│    Regenerate                       │
+│    Cancel                           │
+└─────────────────────────────────────┘
 ```
 
 ---

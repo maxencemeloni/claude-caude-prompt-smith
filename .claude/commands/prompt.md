@@ -151,38 +151,46 @@ Show:
 
 If `--dry-run` is present, show the preview and stop. Do not offer execution options.
 
-If `--yes` is NOT present (and `--dry-run` is not present), stop after the preview and ask for confirmation with exactly these options:
-- `execute`
-- `edit` — provide a correction to refine the optimized prompt
-- `regenerate default`
-- `regenerate agentic`
-- `regenerate compact`
-- `regenerate strict`
-- `cancel`
+If `--yes` is NOT present (and `--dry-run` is not present), stop after the preview and use the `AskUserQuestion` tool to let the user select an action. Present exactly these options:
 
-Then wait for the user.
+**Step 1 — Action selection:**
+Use `AskUserQuestion` with header "Action" and these options:
+- **Execute** — "Run the optimized prompt now"
+- **Edit** — "Provide a correction to refine the optimized prompt"
+- **Regenerate** — "Re-optimize using a different mode"
+- **Cancel** — "Discard and stop"
+
+**Step 2 — Mode selection (only if Regenerate was chosen):**
+Use `AskUserQuestion` with header "Mode" and these options:
+- **default** — "General cleanup"
+- **agentic** — "Orchestration and execution-focused structure"
+- **compact** — "Shortest clean version"
+- **strict** — "Maximum fidelity"
+
+Then proceed based on the user's selection.
 
 ### Phase 2: execution
 
-If the user confirms with `execute`, or if `--yes` was passed (and `--dry-run` is not present):
+If the user selects **Execute**, or if `--yes` was passed (and `--dry-run` is not present):
 - briefly state that you are executing the optimized prompt
 - then treat the optimized prompt as the active instruction and carry it out immediately in the same turn
 - do not ask the user to repeat the prompt
 - do not re-explain the optimization rules
 
-If the user chooses `edit`:
+If the user selects **Edit**:
 - ask what they want to change
 - apply the correction to the optimized prompt while keeping the same mode
 - show the updated preview with the same structure
-- ask for confirmation again
+- ask for confirmation again using `AskUserQuestion`
 
-If the user asks to regenerate in another mode:
+If the user selects **Regenerate**:
+- present the mode selection using `AskUserQuestion` (Step 2)
 - keep the original raw prompt unchanged
-- regenerate using the requested mode
+- regenerate using the selected mode
 - show the same preview structure again
-- ask for confirmation again unless `--yes` is now explicitly requested
+- ask for confirmation again using `AskUserQuestion`
 
-If the user cancels:
+If the user selects **Cancel**:
 - acknowledge cancellation briefly and stop
 
 ## Quality bar
