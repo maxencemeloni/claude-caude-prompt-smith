@@ -2,6 +2,18 @@
 
 All notable changes to this plugin are documented here.
 
+## 1.2.1 — Fix confirmation prompt ordering under Opus 4.8
+
+*Released: June 2026*
+
+### Changes
+
+- Fixed a regression under Opus 4.8 where the `AskUserQuestion` confirmation menu (Execute / Edit / Regenerate / Cancel) appeared **before** the optimized prompt was displayed, forcing users to choose an action without seeing the result
+- Added an explicit output-ordering guard requiring the full preview to be rendered as text before any `AskUserQuestion` call
+- Applied the fix to both the dev and plugin command files (kept in sync)
+
+---
+
 ## 1.2.0 — Interactive confirmation with selectable options
 
 *Released: April 2026*
