@@ -151,6 +151,9 @@ Show:
 
 If `--dry-run` is present, show the preview and stop. Do not offer execution options.
 
+**CRITICAL — output ordering (read this carefully):**
+The full preview (items 1–7 above, including the `Optimized prompt:` and `What changed:` blocks) MUST be written as visible text BEFORE you call `AskUserQuestion`. Never call `AskUserQuestion` as your first action. Never call it before the optimized prompt has been rendered as text. The user has to read the optimized prompt to decide — asking first defeats the entire purpose. Concretely: write the complete preview as your text response first, and only then, in the same turn after the preview text, call `AskUserQuestion`. If you are about to call `AskUserQuestion` and have not yet emitted the optimized prompt as text, STOP and emit the preview first.
+
 If `--yes` is NOT present (and `--dry-run` is not present), stop after the preview and use the `AskUserQuestion` tool to let the user select an action. Present exactly these options:
 
 **Step 1 — Action selection:**
