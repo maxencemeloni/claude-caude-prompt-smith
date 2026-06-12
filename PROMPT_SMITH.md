@@ -105,6 +105,10 @@ If `edit` is chosen, apply the user's correction and show the updated preview ag
 
 If `--dry-run` is present, show the preview only — do not offer execution options.
 
+## Interaction ordering (model-agnostic)
+
+The preview is the deliverable; the confirmation menu follows it. On every confirmation turn, the full preview must be visible text before the `AskUserQuestion` call, the call must happen in the same turn after the preview, and nothing executes without an explicit Execute selection or `--yes`. These invariants hold for every model, current or future. Per-model counter-biases live exclusively in the command files ("Model adaptation" section) — this document never carries model-specific rules.
+
 ## Versioning rules
 
 Use semantic versioning.

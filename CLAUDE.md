@@ -171,6 +171,16 @@ Use these to verify each mode works correctly before releasing:
 | Mode behavior change | `PROMPT_SMITH.md`, both command files | patch |
 | New flag | Both command files, `PROMPT_SMITH.md`, `README.md` | minor |
 | New command | Both command dirs, `README.md`, this file | minor |
+| New model quirk (a model breaks the preview → confirm → execute ordering) | Both command files — one new row in the "Known model adjustments" table of the "Model adaptation" section | patch |
+
+### Adding a model quirk row
+
+1. Reproduce the break, then capture the model identity from the session system prompt (display name + model ID, e.g. "Fable 5" / `claude-fable-5`). Self-identification is the only detection mechanism — there is no env var exposing the session model to slash commands; do not invent one.
+2. Describe the *observed* bias in one or two sentences — what the model actually did and the trained habit driving it, not a guess. Never add speculative rows.
+3. Write the counter by naming the bias, stating why it is misplaced in Claude Code's terminal context, and pointing at the universal invariant(s) the model must hold.
+4. If no existing invariant covers the new failure, the invariant set is incomplete: extend the invariants as a deliberate, model-agnostic decision (still a patch bump) rather than writing a model-specific rule the next model would dodge.
+5. Edit `commands/prompt.md` and `.claude/commands/prompt.md` identically; verify with `diff .claude/commands/prompt.md commands/prompt.md` — only the PROMPT_SMITH.md path line may differ. Never add model rules to `PROMPT_SMITH.md`.
+6. Verify with the Test Prompts table above, then release a patch bump via `/release`.
 
 ---
 

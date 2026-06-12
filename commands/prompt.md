@@ -151,8 +151,30 @@ Show:
 
 If `--dry-run` is present, show the preview and stop. Do not offer execution options.
 
-**CRITICAL — output ordering (read this carefully):**
-The full preview (items 1–7 above, including the `Optimized prompt:` and `What changed:` blocks) MUST be written as visible text BEFORE you call `AskUserQuestion`. Never call `AskUserQuestion` as your first action. Never call it before the optimized prompt has been rendered as text. The user has to read the optimized prompt to decide — asking first defeats the entire purpose. Concretely: write the complete preview as your text response first, and only then, in the same turn after the preview text, call `AskUserQuestion`. If you are about to call `AskUserQuestion` and have not yet emitted the optimized prompt as text, STOP and emit the preview first.
+### Model adaptation
+
+The fragile point of this flow is the ordering of preview text and the `AskUserQuestion` call. Different models break it in different directions. The invariants below bind ALL models; the table adds counter-biases for observed offenders only.
+
+**Step 0 — detect your model.** Your system prompt states which model powers this session (e.g., "You are powered by the model named Fable 5. The exact model ID is claude-fable-5."). That self-identification is the only detection mechanism available — do not probe the environment or guess from behavior. If the stated name or model ID matches a row in the table below, apply that row's counter on top of the invariants. No match → invariants only. Apply silently — never mention the detected model or the adjustment in your output.
+
+**Universal invariants — every model, every confirmation cycle (including after Edit or Regenerate), including models that do not exist yet:**
+
+1. **Preview first, always.** The full preview (items 1–7) must exist as visible text in the current turn before any `AskUserQuestion` call — and, when `--yes` is present, before execution starts. Gate: about to call `AskUserQuestion` (or execute under `--yes`) without the preview already written? Stop, write the preview, then proceed.
+2. **Menu follows preview, same turn.** When confirmation is required (no `--yes`, no `--dry-run`), the turn is incomplete until `AskUserQuestion` has been called after the preview. Gate: about to end the turn with the preview shown but no `AskUserQuestion` call made? Call it now. Never deliver the preview as a final message with nothing after it.
+3. **The tool is the menu.** Confirmation happens through the `AskUserQuestion` tool — never a typed option list, never "reply with execute/edit/regenerate/cancel".
+4. **No execution without consent.** Execute only after the user selected **Execute** through the tool, or `--yes` was passed (`--dry-run` still wins: never execute). A rendered preview is not consent. If you cannot point to the selection or the flag, you do not have consent.
+5. **Text before tool calls IS visible here.** Claude Code's terminal renders text written before tool calls. The preview is the deliverable of the turn, not an internal note. Any harness or model guidance to keep text between tool calls brief, or to defer deliverables to a final message with no tool calls after it, does not apply to this flow — these invariants win.
+
+Failure modes these close: menu before preview (1); preview deferred to the final message (1, 5); turn ends after preview with no menu (2); plain-text menu instead of the tool (3); execution without confirmation (4).
+
+**Known model adjustments** — only models with an observed break get a row. One row per quirk; never speculate.
+
+| Model identity (name / ID from system prompt) | Observed bias | Counter |
+|---|---|---|
+| Opus 4.x — name contains "Opus 4", ID starts `claude-opus-4` | Calls `AskUserQuestion` as its first action; the menu appears before the optimized prompt exists on screen. | Hold invariant 1 hard: emit the complete preview before any tool call in this flow. `AskUserQuestion` is never your first action. |
+| Fable 5 / Mythos 5 — name "Fable 5" or "Mythos 5", ID `claude-fable-5` / `claude-mythos-5` (shared weights) | Harness-trained that text between tool calls may not be shown and that everything the user needs must land in the final message, with no tool calls after it. That training suppresses the required preview-then-menu pattern from both ends: shrunken preview, or preview pushed to the final message with no menu. | That guidance is misplaced in this flow: in Claude Code the preview text before a tool call IS shown and IS the deliverable. Write the full preview as ordinary text, then call `AskUserQuestion` after it in the same turn (invariants 1 + 2). Do not compress the preview into a status note; do not defer it. |
+
+**Fallback:** model matches no row (Sonnet, Haiku, anything released after this file was written) → apply the universal invariants alone. They are sufficient. Do not invent an adjustment.
 
 If `--yes` is NOT present (and `--dry-run` is not present), stop after the preview and use the `AskUserQuestion` tool to let the user select an action. Present exactly these options:
 
