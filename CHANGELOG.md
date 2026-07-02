@@ -2,6 +2,20 @@
 
 All notable changes to this plugin are documented here.
 
+## 1.2.2 — Model-detection adaptation layer for preview→confirm ordering
+
+*Released: July 2026*
+
+### Changes
+
+- Replaced the hardcoded Opus 4.8 output-ordering guard with a model-detection adaptation layer: five universal ordering invariants that bind every model, plus a per-model counter-bias table applied via system-prompt self-identification
+- Added a counter for Fable 5 / Mythos 5 (`claude-fable-5` / `claude-mythos-5`), whose harness training suppresses the preview-then-menu pattern — observed calling `AskUserQuestion` with no preview on screen at all
+- Kept the Opus 4.x counter (menu-before-preview as first action) as a table row
+- Unmatched models (Sonnet, Haiku, future releases) fall back to the universal invariants alone
+- Applied identically to both the dev and plugin command files (kept in sync)
+
+---
+
 ## 1.2.1 — Fix confirmation prompt ordering under Opus 4.8
 
 *Released: June 2026*
